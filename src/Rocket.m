@@ -434,7 +434,7 @@ classdef Rocket
                 
                 % Simulate open-loop along U trajectory
                 fprintf(['  > Simulating ' model_text ' model in ' ...
-                    loop_text '-loop to Tf = ' num2str(Tf) ':  ( ']); tic;
+                    loop_text '-loop to Tf = ' num2str(Tf) ':\n    ( ']); tic;
                 for iStep = 1:nSteps
                     
                     % Print simulation time
@@ -497,7 +497,7 @@ classdef Rocket
                 
                 % Simulate closed-loop using control law
                 fprintf(['  > Simulating ' model_text ' model ' estimator_text ...
-                    'in ' loop_text '-loop to Tf = ' num2str(Tf) ':  ( ']); tic;
+                    'in ' loop_text '-loop to Tf = ' num2str(Tf) ':\n    ( ']); tic;
                 
                 sim_success = true;
                 for iStep = 1:nSteps
@@ -560,7 +560,7 @@ classdef Rocket
                 num_tol = [deg2rad([0.1, 0.1]) 0.1 0.1]';
                 lb_exceeded = any(U < (lbu_ - num_tol), 2); ub_exceeded = any((ubu_ + num_tol) < U, 2);
                 warning('off','backtrace')
-                if any(lb_exceeded, 'all') || any(ub_exceeded, 'all')
+                if any([ub_exceeded; lb_exceeded])
                     for i = 1:length(ub_exceeded)
                         if ub_exceeded(i)
                             warning(['Upper physical limit of input ' num2str(i) ' has been exceeded during the simulation.']);
@@ -622,7 +622,11 @@ classdef Rocket
             ax = ph.ax_pose;
             %cla(ax);
             
-            sim_dt = T(2) - T(1);
+            if length(T) < 2
+                sim_dt = 0.05;
+            else
+                sim_dt = T(2) - T(1);
+            end
             nT = length(T);
             
             if size(U, 2) < 2
@@ -706,7 +710,10 @@ classdef Rocket
             nxu = 12 + 4;
             nColVis = 2; % Number of columns for pose visualization
             
-            ph.fig = figure('Position', [2000, 925, 1400, 730]);
+            targetSize = [1400, 730];
+            position = obj.get_position_on_screen(targetSize);
+            ph.fig = figure('Position', position);
+
             nrow = 5;
             ncol = 3 + nColVis;
             
@@ -780,7 +787,10 @@ classdef Rocket
             nxu = size(subX, 1) + size(subU, 1);
             nColVis = 1; % Number of columns for pose visualization
             
-            ph.fig = figure('Position', [2000, 925, 1120, 420]);
+            targetSize = [1120, 420];
+            position = obj.get_position_on_screen(targetSize);
+            ph.fig = figure('Position', position);
+
             nrow = nxu;
             ncol = 1 + nColVis;
             
@@ -1041,12 +1051,15 @@ classdef Rocket
                 line(ax_, repmat([T(1) T(end)], 2, 1)', repmat(lub, 2, 1), 'Color', 'k', 'LineStyle', '-.', 'LineWidth', lw);
                 
                 YLabel = ax_.YLabel.String;
-                YLabeli = [axisName ' [' axisUnit ']'];
-                if ~isempty(YLabel)
-                    ylabel(ax_, [YLabel, ', ' YLabeli]);
+                YLabeli = {[axisName ' [' axisUnit ']']};
+                
+                if isempty(YLabel)
+                    YLabel = cell(YLabeli);
                 else
-                    ylabel(ax_, YLabeli);
+                    YLabel = [YLabel, YLabeli];
                 end
+                
+                ylabel(ax_, YLabel);
             end
             
             % Plot input and state constraints
@@ -1054,13 +1067,39 @@ classdef Rocket
             for ix = 1:nx, plot_constraints_and_yLabels(ax(ux_id(nu+ix)), bx(ix,:), sys.StateName{ix}, sys.StateUnit{ix}); end, clear ix
             
             % Plot input
-            for iu = 1:nu, plot( ax(ux_id(iu)),    T, U(iu, :), 'LineWidth', lw ); end, clear iu
+            for iu = 1:nu, plot( ax(ux_id(iu)),  T, U(iu, :), 'LineWidth', lw ); end, clear iu
             % Plot state
             for ix = 1:nx, plot( ax(ux_id(nu+ix)), T, X(ix, :), 'LineWidth', lw ); end, clear ix
             % Plot reference
             for ix = 1:nx, plot( ax(ux_id(nu+ix)), T, X_ref(ix,:), 'Color', obj.color.ref, 'LineStyle', '--', 'LineWidth', lw ); end, clear ix
         end
         
+        %
+        % Get safe outer figure size for specific screen
+        %
+        function Position = get_position_on_screen(~, targetSize, max_screen_usage)
+
+            if nargin < 3
+                max_screen_usage = 0.9;
+            end
+
+            figRatio = targetSize(1) / targetSize(2);
+
+            screenSize = get(0, 'ScreenSize'); screenSize = screenSize(3:4);
+            availSize = max_screen_usage * screenSize;
+            horClip = [availSize(1), availSize(1) / figRatio];
+            verClip = [figRatio * availSize(2), availSize(2)];
+            minClip = min(horClip, verClip);
+            figSize = round( min(minClip, targetSize) );
+            
+            % Determine figure offset (window/menu bar)
+            f = figure('Visible', 'off');
+            sizeOffset = f.OuterPosition(3:4) - f.Position(3:4);
+            close(f);
+
+            outerPos = screenSize - figSize - sizeOffset - [0 50]; % 50 height safety for Windows
+            Position = [outerPos, figSize];
+        end
     end
     
     methods (Static)
