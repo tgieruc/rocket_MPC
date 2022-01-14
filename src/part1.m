@@ -1,3 +1,5 @@
+close all;
+
 Ts = 1/20;
 rocket = Rocket(Ts);
 
@@ -112,7 +114,7 @@ rocket.vis(T, X, U);
 %% Hover in space.
 d1 = 0;
 d2 = 0;
-Pavg = 56.666;
+Pavg = 56.666;  
 Pdiff = 0;
 u = [d1, d2, Pavg, Pdiff]'; % (Assign appropriately)
 [b_F, b_M] = rocket.getForceAndMomentFromThrust(u)
