@@ -34,6 +34,37 @@ classdef MPC_Control_x < MPC_Control
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
             obj = 0;
             con = [];
+
+            %contraintes en orange:
+            abs(alpha) <= 0.0873;
+            abs(beta) <= 0.0873;
+            Pavg >= 0.5; 
+            Pavg <= 0.8;
+            abs(Pdiff) <= 0.2;
+            %manque les mechanical constraints?
+
+            %pr moi il faut qu'on définisse les contraintes en orange ds
+            %pdf plus haut et ci-dessous on écrit la "fonction" qui utilise
+            %ces contraintes.
+
+        
+            %c'est quoi le M et le F ? 
+            %remplacer les x par x_ref et u par u_ref 
+            con = (x(:,2) == A*x(:,1) + B*u(:,1)) + (M*u(:,1) <= m);
+            obj = u(:,1)'*R*u(:,1);
+
+            for i = 2:N-1
+                con = con + (x(:,i+1) == A*x(:,i) + B*u(:,i));
+                con = con + (F*x(:,i) <= f) + (M*u(:,i) <= m);
+                obj = obj + x(:,i)'*Q*x(:,i) + u(:,i)'*R*u(:,i);
+            end
+            
+            con = con + ...;
+            obj = obj + ...;
+
+            %https://yalmip.github.io/example/standardmpc/ 
+            %checker le site pour plus d'infos sur MPC with Yalmip
+
             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
