@@ -39,7 +39,8 @@ classdef MPC_Control
                 if solve_status ~= 0
                     solve_status_str = yalmiperror(solve_status);
                     fprintf([' [Target: ' solve_status_str(1:end-1) '] ']);
-                    u = nan(size(u));
+                    u = nan(struct(mpc.ctrl_opti).dimoutOrig{1}); 
+                    return
                 end
             else
                 % ... set origin
