@@ -4,3 +4,7 @@ rocket = Rocket(Ts);
 sys = rocket.linearize(xs, us)
 
 [sys_x, sys_y, sys_z, sys_roll] = rocket.decompose(sys, xs, us)
+
+syms wx wy wz alpha beta gamma vx vy vz x z y d1 d2 Pavg Pdiff
+x_vec = [ wx wy wz alpha beta gamma vx vy vz x z y]';
+u_vec = [d1 d2 Pavg Pdiff]';
