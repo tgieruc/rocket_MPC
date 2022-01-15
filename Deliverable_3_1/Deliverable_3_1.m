@@ -33,8 +33,8 @@ ph = rocket.plotvis_sub(T, X_sub, U_sub, sys_y, xs, us);
 H = 6; % Horizon length in seconds
 mpc_z = MPC_Control_z(sys_z, Ts, H);
 % Get control input
-Tf = 6.0;
-x0 = [0 ,5]'; % (Assign appropriately)
+Tf = 8.0;
+x0 = [0, 5]'; % (Assign appropriately)
 [T, X_sub, U_sub] = rocket.simulate(sys_z, x0, Tf, @mpc_z.get_u, 0);
 ph = rocket.plotvis_sub(T, X_sub, U_sub, sys_z, xs, us);
 
@@ -45,6 +45,6 @@ H = 6; % Horizon length in seconds
 mpc_roll = MPC_Control_roll(sys_roll, Ts, H);
 % Get control input
 Tf = 6.0;
-x0 = [0 ,pi/4]'; % (Assign appropriately)
+x0 = [0, pi/4]'; % (Assign appropriately)
 [T, X_sub, U_sub] = rocket.simulate(sys_roll, x0, Tf, @mpc_roll.get_u, 0);
 ph = rocket.plotvis_sub(T, X_sub, U_sub, sys_roll, xs, us);

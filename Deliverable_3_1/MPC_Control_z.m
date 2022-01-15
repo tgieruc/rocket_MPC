@@ -46,7 +46,7 @@ classdef MPC_Control_z < MPC_Control
             %       the DISCRETE-TIME MODEL of your system
             
             % Horizon and cost matrices
-            Q = 2 * eye(nx);
+            Q = 10 * eye(nx);
             R = 1;
             A = mpc.A;
             B = mpc.B;
