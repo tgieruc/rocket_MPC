@@ -1166,8 +1166,6 @@ classdef Rocket
             Twb = T1(-alp) * T2(-bet) * T3(-gam);
         end
         
-        
-        
         %
         % Create pose axes (3D, equal, hold, grid, labels)
         %

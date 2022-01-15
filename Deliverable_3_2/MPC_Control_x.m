@@ -1,4 +1,4 @@
-classdef MPC_Control_roll < MPC_Control
+classdef MPC_Control_x < MPC_Control
     
     methods
         % Design a YALMIP optimizer object that takes a steady-state state
@@ -11,13 +11,13 @@ classdef MPC_Control_roll < MPC_Control
             %   x_ref, u_ref - reference state/input
             % OUTPUTS
             %   U(:,1)       - input to apply to the system
-            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
             N = ceil(H/Ts); % Horizon steps
-            
+
             [nx, nu] = size(mpc.B);
             
-            % Steady-state targets (Ignore this before Todo 3.2)
+            % Targets (Ignore this before Todo 3.2)
             x_ref = sdpvar(nx, 1);
             u_ref = sdpvar(nu, 1);
             
@@ -30,18 +30,18 @@ classdef MPC_Control_roll < MPC_Control
             
             % NOTE: The matrices mpc.A, mpc.B, mpc.C and mpc.D are
             %       the DISCRETE-TIME MODEL of your system
-            
-            % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
+
+
             % Horizon and cost matrices
             Q = 2 * eye(nx);
             R = 1;
             A = mpc.A;
             B = mpc.B;
-            % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
-            M = [1; -1]; m = [20; 20];
-            F = [0 0]; f = [0];
 
-             
+            M = [1; -1]; m = [0.26; 0.26];
+            % x in X = { x | Fx <= f }
+            F = [0 1 0 0 ; 0 -1 0 0]; f = [0.0873; 0.0873];
+            
             % Compute LQR controller for unconstrained system
             [K,Qf,~] = dlqr(A,B,Q,R);
             % MATLAB defines K as -K, so invert its signal
@@ -60,17 +60,19 @@ classdef MPC_Control_roll < MPC_Control
             end
             [Ff,ff] = double(Xf);
 
-
             con = (X(:,2) == A*X(:,1) + B*U(:,1)) + (M*U(:,1) <= m);
             obj = U(:,1)'*R*U(:,1);
             for i = 2:N-1
                 con = con + (X(:,i+1) == A*X(:,i) + B*U(:,i));
-                con = con + (M*U(:,i) <= m);
+                con = con + (F*X(:,i) <= f) + (M*U(:,i) <= m);
                 obj = obj + X(:,i)'*Q*X(:,i) + U(:,i)'*R*U(:,i);
             end
             con = con + (Ff*X(:,N) <= ff);
             obj = obj + X(:,N)'*Qf*X(:,N);
 
+
+
+            
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
@@ -90,8 +92,9 @@ classdef MPC_Control_roll < MPC_Control
             %   xs, us - steady-state target
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             
-            % Steady-state targets
             nx = size(mpc.A, 1);
+
+            % Steady-state targets
             xs = sdpvar(nx, 1);
             us = sdpvar;
             
@@ -101,8 +104,34 @@ classdef MPC_Control_roll < MPC_Control
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             % You can use the matrices mpc.A, mpc.B, mpc.C and mpc.D
+
+    	    % Horizon and cost matrices
+            Q = 2 * eye(nx);
+            R = 1;
+            A = mpc.A;
+            B = mpc.B;
+            C = mpc.C;
+
+            M = [1; -1]; m = [0.26; 0.26];
+            % x in X = { x | Fx <= f }
+            F = [0 1 0 0 ; 0 -1 0 0]; f = [0.0873; 0.0873];
+            
+
+
+            con = [(eye(nx) - A) * xs(:,1) - B * us == 0,C * us == ref];
             obj = 0;
-            con = [xs == 0, us == 0];
+%             (X(:,2) == A*X(:,1) + B*U(:,1)) + (M*U(:,1) <= m);
+%             obj = U(:,1)'*R*U(:,1);
+%             for i = 2:N-1
+%                 con = con + (X(:,i+1) == A*X(:,i) + B*U(:,i));
+%                 con = con + (F*X(:,i) <= f) + (M*U(:,i) <= m);
+%                 obj = obj + X(:,i)'*Q*X(:,i) + U(:,i)'*R*U(:,i);
+%             end
+
+
+% 
+%             obj = 0;
+%             con = [xs == 0, us == 0];
             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
