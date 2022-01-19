@@ -113,25 +113,15 @@ classdef MPC_Control_x < MPC_Control
             C = mpc.C;
 
             M = [1; -1]; m = [0.26; 0.26];
+            obj = 0;
             % x in X = { x | Fx <= f }
             F = [0 1 0 0 ; 0 -1 0 0]; f = [0.0873; 0.0873];
             
+            
 
-
-            con = [(eye(nx) - A) * xs(:,1) - B * us == 0,C * us == ref];
+ 
             obj = 0;
-%             (X(:,2) == A*X(:,1) + B*U(:,1)) + (M*U(:,1) <= m);
-%             obj = U(:,1)'*R*U(:,1);
-%             for i = 2:N-1
-%                 con = con + (X(:,i+1) == A*X(:,i) + B*U(:,i));
-%                 con = con + (F*X(:,i) <= f) + (M*U(:,i) <= m);
-%                 obj = obj + X(:,i)'*Q*X(:,i) + U(:,i)'*R*U(:,i);
-%             end
-
-
-% 
-%             obj = 0;
-%             con = [xs == 0, us == 0];
+            con = [xs == 0, us == 0];
             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
