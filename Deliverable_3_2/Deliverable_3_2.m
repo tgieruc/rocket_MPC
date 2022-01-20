@@ -15,8 +15,8 @@ mpc_x = MPC_Control_x(sys_x, Ts, H);
 % Get control input
 Tf = 6.0;
 x0 = [0, 0 ,0 ,0]'; % (Assign appropriately)
-x_position_reference = [0, 0 ,0 ,-5]'; % (Assign appropriately)
-ux = mpc_x.get_u(x0, x_position_reference);
+x_ref = -5; % (Assign appropriately)
+ux = mpc_x.get_u(x0, x_ref);
 [T, X_sub, U_sub] = rocket.simulate(sys_x, x0, Tf, @mpc_x.get_u, x_ref);
 ph = rocket.plotvis_sub(T, X_sub, U_sub, sys_x, xs, us, x_ref);
 
