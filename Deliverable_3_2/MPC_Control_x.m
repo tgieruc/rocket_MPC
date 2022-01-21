@@ -33,7 +33,7 @@ classdef MPC_Control_x < MPC_Control
             
             % Step cost function
             Q = 2 * eye(nx);
-            R    = 1;
+            R = 1;
             A = mpc.A; B = mpc.B; 
             % u in U = { u| Mu <= m }
             M = [1; -1]; m = [0.26; 0.26];
@@ -91,7 +91,8 @@ classdef MPC_Control_x < MPC_Control
             % x in X = { x | Fx <= f }
             F = [0 1 0 0 ; 0 -1 0 0]; f = [0.0873; 0.0873];
             con = [M * us <= m, F * xs <= f, ...
-                   xs == mpc.A*xs + mpc.B*us, ref == mpc.C*xs + mpc.D];
+                   xs == mpc.A*xs + mpc.B*us, ...
+                   ref == mpc.C*xs + mpc.D];
             
             obj   = us' * R * us;
             
