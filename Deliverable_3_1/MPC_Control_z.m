@@ -51,7 +51,7 @@ classdef MPC_Control_z < MPC_Control
             A = mpc.A;
             B = mpc.B;
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
-            M = [1; -1]; m = [80; -50];
+            M = [1; -1]; m = [23.33; 6.66667];
             F = [0 0]; f = [0];
 
              
