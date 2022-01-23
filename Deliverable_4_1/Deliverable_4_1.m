@@ -1,10 +1,11 @@
+
 addpath(fullfile('..', 'src'));
 
 %% TODO: This file should produce all the plots for the deliverable
 
 Ts = 1/20; % Sample time
 rocket = Rocket(Ts);
-H = 4; % Horizon length in seconds
+H = 9; % Horizon length in seconds
 
 [xs, us] = rocket.trim();
 sys = rocket.linearize(xs, us);
