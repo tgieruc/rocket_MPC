@@ -32,13 +32,14 @@ classdef MPC_Control_y < MPC_Control
             %       the DISCRETE-TIME MODEL of your system
             
             % Step cost function
-            Q = diag([40,1,1,20]) * eye(nx);
-            R = 0.01;
+            Q = diag([100,1,0.7,4]) * eye(nx);
+            R = 1;
             A = mpc.A; B = mpc.B; 
             % u in U = { u| Mu <= m }
             M = [1; -1]; m = [0.26; 0.26];
             % x in X = { x | Fx <= f }
             F = [0 1 0 0 ; 0 -1 0 0]; f = [0.0873; 0.0873];
+            [~, P, ~] = dlqr(A,B,Q,R);
 
             %% Set up the MPC cost and constraints using the computed set-point
             con = [];
@@ -48,7 +49,7 @@ classdef MPC_Control_y < MPC_Control
                 obj   = obj + (X(:,i)-x_ref)'*Q*(X(:,i)-x_ref) + (U(:,i)-u_ref)'*R*(U(:,i)-u_ref);
                 con = con + (F*X(:,i) <= f) +  (M*U(:,i)<= m);
             end
-            obj = obj + (X(:,i)-x_ref)'*Q*(X(:,i)-x_ref);
+            obj = obj + (X(:,i)-x_ref)'*P*(X(:,i)-x_ref);
             
             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
