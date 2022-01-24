@@ -131,19 +131,33 @@ classdef MPC_Control_z < MPC_Control
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             % You can use the matrices mpc.A, mpc.B, mpc.C and mpc.D
-            nx   = size(mpc.A,1);
-            nu   = size(mpc.B,2);
-            ny   = size(mpc.C,1);
-
-            A_bar = [mpc.A          , zeros(nx,1);
-            zeros(1,nx),1          ];
-            B_bar = [mpc.B;zeros(1,nu)];
-            C_bar = [mpc.C,ones(ny,1)];
-                
-            L = -place(A_bar',C_bar',[0.5,0.6,0.7])';
-            
-            P = dlyap(A,Q);
-            
+%             nx   = size(mpc.A,1);
+%             nu   = size(mpc.B,2);
+%             ny   = size(mpc.C,1);
+% 
+%             A_bar = [mpc.A, zeros(nx,1); zeros(1,nx), 1];
+%             B_bar = [mpc.B;zeros(1,nu)];
+%             C_bar = [mpc.C,ones(ny,1)];
+%                 
+%             L = -place(A_bar',C_bar',[0, 0.4, -0.9])';
+               A = mpc.A; 
+      B = mpc.B;
+      C = mpc.C; 
+      
+      nx = size(A, 1);
+      nu = size(B, 2);
+      ny = size(C, 1);
+      
+      A_bar = [A,B; 
+              zeros(1, nx), 1];
+          
+      B_bar = [B; 
+               zeros(1,nu)];
+           
+      C_bar = [mpc.C, zeros(ny,1)];
+      
+      L = -place(A_bar', C_bar', [0, 0.001i, -0.001i])';
+                        
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         end
