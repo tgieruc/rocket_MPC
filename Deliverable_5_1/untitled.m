@@ -47,22 +47,21 @@ classdef MPC_Control_z < MPC_Control
             
 
             % Step cost function
-            Q = 20 * eye(nx);
-            R = 0.001;
+            Q = 2 * eye(nx);
+            R = 1;
             A = mpc.A; B = mpc.B; 
             % u in U = { u| Mu <= m }
             M = [1; -1]; m = [23.33; 6.66667];
-            [~, P, ~] = dlqr(A,B,Q,R);
 
             %% Set up the MPC cost and constraints using the computed set-point
             con = [];
             obj   = 0;
             for i = 1:N-1
-                con = con + (X(:,i+1) == A*X(:,i) + B*U(:,i));
+                con = con + (X(:,i+1) == A*X(:,i) + B*U(:,i) + B*d_est); % updated setup_controller
                 obj   = obj + (X(:,i)-x_ref)'*Q*(X(:,i)-x_ref) + (U(:,i)-u_ref)'*R*(U(:,i)-u_ref);
                 con = con + (M*U(:,i)<= m);
             end
-            obj = obj + (X(:,i)-x_ref)'* P *(X(:,i)-x_ref);
+            obj = obj + (X(:,i)-x_ref)'*Q*(X(:,i)-x_ref);
              
 
             
@@ -108,7 +107,7 @@ classdef MPC_Control_z < MPC_Control
             % u in U = { u| Mu <= m }
             M = [1; -1]; m = [23.33; 6.66667];
             con = [M * us <= m, ...
-                   xs == mpc.A*xs + mpc.B*us, ...
+                   xs == mpc.A*xs + mpc.B*us + mpc.B*d_est, ...
                    ref == mpc.C*xs + mpc.D];
             
             obj   = us' * R * us;
@@ -132,12 +131,33 @@ classdef MPC_Control_z < MPC_Control
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             % You can use the matrices mpc.A, mpc.B, mpc.C and mpc.D
-            
-            A_bar = [];
-            B_bar = [];
-            C_bar = [];
-            L = [];
-            
+%             nx   = size(mpc.A,1);
+%             nu   = size(mpc.B,2);
+%             ny   = size(mpc.C,1);
+% 
+%             A_bar = [mpc.A, zeros(nx,1); zeros(1,nx), 1];
+%             B_bar = [mpc.B;zeros(1,nu)];
+%             C_bar = [mpc.C,ones(ny,1)];
+%                 
+%             L = -place(A_bar',C_bar',[0, 0.4, -0.9])';
+               A = mpc.A; 
+      B = mpc.B;
+      C = mpc.C; 
+      
+      nx = size(A, 1);
+      nu = size(B, 2);
+      ny = size(C, 1);
+      
+      A_bar = [A,B; 
+              zeros(1, nx), 1];
+          
+      B_bar = [B; 
+               zeros(1,nu)];
+           
+      C_bar = [mpc.C, zeros(ny,1)];
+      
+      L = -place(A_bar', C_bar', [0, 0.001i, -0.001i])';
+                        
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         end

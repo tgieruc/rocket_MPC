@@ -52,6 +52,7 @@ classdef MPC_Control_z < MPC_Control
             A = mpc.A; B = mpc.B; 
             % u in U = { u| Mu <= m }
             M = [1; -1]; m = [23.33; 6.66667];
+            [~, P, ~] = dlqr(A,B,Q,R);
 
             %% Set up the MPC cost and constraints using the computed set-point
             con = [];
@@ -61,7 +62,7 @@ classdef MPC_Control_z < MPC_Control
                 obj   = obj + (X(:,i)-x_ref)'*Q*(X(:,i)-x_ref) + (U(:,i)-u_ref)'*R*(U(:,i)-u_ref);
                 con = con + (M*U(:,i)<= m);
             end
-            obj = obj + (X(:,i)-x_ref)'*Q*(X(:,i)-x_ref);
+            obj = obj + (X(:,i)-x_ref)'* P *(X(:,i)-x_ref);
              
 
             

@@ -39,6 +39,7 @@ classdef MPC_Control_roll < MPC_Control
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
             % u in U = { u| Mu <= m }
             M = [1; -1]; m = [20; 20];
+            [~, P, ~] = dlqr(A,B,Q,R);
 
 
              
@@ -50,7 +51,7 @@ classdef MPC_Control_roll < MPC_Control
                 obj   = obj + (X(:,i)-x_ref)'*Q*(X(:,i)-x_ref) + (U(:,i)-u_ref)'*R*(U(:,i)-u_ref);
                 con = con + (M*U(:,i)<= m);
             end
-            obj = obj + (X(:,i)-x_ref)'*Q*(X(:,i)-x_ref);
+            obj = obj + (X(:,i)-x_ref)'*P*(X(:,i)-x_ref);
             
 
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE

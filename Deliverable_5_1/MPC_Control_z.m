@@ -45,10 +45,10 @@ classdef MPC_Control_z < MPC_Control
             % NOTE: The matrices mpc.A, mpc.B, mpc.C and mpc.D are
             %       the DISCRETE-TIME MODEL of your system
             
-
+            
             % Step cost function
-            Q = 20 * eye(nx);
-            R = 0.001;
+            Q = diag([30,40]);
+            R = 0.5;
             A = mpc.A; B = mpc.B; 
             % u in U = { u| Mu <= m }
             M = [1; -1]; m = [23.33; 6.66667];
@@ -58,7 +58,7 @@ classdef MPC_Control_z < MPC_Control
             con = [];
             obj   = 0;
             for i = 1:N-1
-                con = con + (X(:,i+1) == A*X(:,i) + B*U(:,i));
+                con = con + (X(:,i+1) == A*X(:,i) + B*U(:,i) + B*d_est);
                 obj   = obj + (X(:,i)-x_ref)'*Q*(X(:,i)-x_ref) + (U(:,i)-u_ref)'*R*(U(:,i)-u_ref);
                 con = con + (M*U(:,i)<= m);
             end
@@ -108,8 +108,8 @@ classdef MPC_Control_z < MPC_Control
             % u in U = { u| Mu <= m }
             M = [1; -1]; m = [23.33; 6.66667];
             con = [M * us <= m, ...
-                   xs == mpc.A*xs + mpc.B*us, ...
-                   ref == mpc.C*xs + mpc.D];
+                   xs == mpc.A*xs + mpc.B*us + mpc.B * d_est, ...
+                   ref == mpc.C*xs + mpc.D * d_est];
             
             obj   = us' * R * us;
             
@@ -132,11 +132,33 @@ classdef MPC_Control_z < MPC_Control
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             % You can use the matrices mpc.A, mpc.B, mpc.C and mpc.D
-            
-            A_bar = [];
-            B_bar = [];
-            C_bar = [];
-            L = [];
+%             [nx, nu] = size(mpc.B);
+%             ny = size(mpc.C,1);
+%             A_bar = [mpc.A, zeros(nx,1); zeros(1,nx),1];
+%             B_bar = [mpc.B;zeros(1,nu)];
+%             C_bar = [mpc.C,ones(ny,1)];
+% %             L = 0.5*eye(size(mpc.C,1)); % Observer matri
+%             a = 0.1;
+%             b = 0.3;
+%             L = -place(A_bar',C_bar',[a,a + b, a + 2 *b])';
+
+               A = mpc.A; 
+      B = mpc.B;
+      C = mpc.C; 
+      
+      nx = size(A, 1);
+      nu = size(B, 2);
+      ny = size(C, 1);
+      
+      A_bar = [A,B; 
+              zeros(1, nx), 1];
+          
+      B_bar = [B; 
+               zeros(1,nu)];
+           
+      C_bar = [mpc.C, zeros(ny,1)];
+      
+      L = -place(A_bar', C_bar', [0.1, 0.2, 0.3])';
             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
