@@ -17,6 +17,11 @@ ref_sym = opti.parameter(4, 1);   % target position
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
+opti.minimize(...
+  -10*sum(X(2,:))  + ... % Max velocity
+  0.1*U(1,:)*U(1,:)' + ... % Minimize accel
+  10*U(2,:)*U(2,:)'   + ... % Minimize braking
+  10000*(epsilon_speed(1,:)*epsilon_speed(1,:)' + sum(epsilon_speed))); % Soft constraints
 
 
 
