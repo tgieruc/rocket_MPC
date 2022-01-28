@@ -22,14 +22,10 @@ M(10:12,1:3) = eye(3); %x y z
 M(6, 4) = 1; %gamma
 
 % Q = diag([100 100 1 1 1 20 0.7 0.7 30 4 4 4000]);
-Q = diag([100 100 1 1 1 5 1 1 1 5000 5000 5000]);
+Q = diag([50 50 1 1 1 500 1 1 1 5000 5000 5000]);
 
-R = diag([0.0001 0.0001 0.0001 0.0001]);
+R = diag([0.0001 0.0001 1 0.0001]);
 f_discrete = @(x,u) RK4(x,u,1/10,rocket);
-
-% sys_s = rocket.linearize(xs, us); % continuous
-% 
-% sys_sd = c2d(sys_s, rocket.Ts); % discrete
 
 obj=0;
 
