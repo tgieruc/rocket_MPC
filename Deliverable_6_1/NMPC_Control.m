@@ -21,9 +21,11 @@ M = zeros(nx, nu);
 M(10:12,1:3) = eye(3); %x y z 
 M(6, 4) = 1; %gamma
 
-Q = diag([100 100 1 1 1 20 0.7 0.7 30 4 4 4000]);
+% Q = diag([100 100 1 1 1 20 0.7 0.7 30 4 4 4000]);
+Q = diag([100 100 1 1 1 5 1 1 1 5000 5000 5000]);
+
 R = diag([0.0001 0.0001 0.0001 0.0001]);
-f_discrete = @(x,u) RK4(x,u,N,rocket);
+f_discrete = @(x,u) RK4(x,u,1/10,rocket);
 
 % sys_s = rocket.linearize(xs, us); % continuous
 % 
@@ -31,16 +33,15 @@ f_discrete = @(x,u) RK4(x,u,N,rocket);
 
 obj=0;
 
-
 for i = 1 : N-1
     opti.subject_to(X_sym(:, i+1) == f_discrete(X_sym(:,i), U_sym(:,i)))
     obj = obj + (X_sym(:, i) - M * ref_sym)'*Q*(X_sym(:, i) - M * ref_sym) + U_sym(:, i)'*R*U_sym(:, i);
 end
 
 opti.subject_to(X_sym(:, 1) == x0_sym);
-% opti.subject_to(-deg2rad(85) <= X_sym(5,:) <= deg2rad(85))
+opti.subject_to(-deg2rad(85) <= X_sym(5,:) <= deg2rad(85))
 
-opti.subject_to([-0.26; -0.26; 20; -20] <= U_sym <= [0.26; 0.26; 80; 20])
+opti.subject_to([-0.26; -0.26; 50; -20] <= U_sym <= [0.26; 0.26; 80; 20])
 
 opti.minimize(obj + (X_sym(:, N) - M * ref_sym)'*Q*(X_sym(:,N) - M * ref_sym));
 
