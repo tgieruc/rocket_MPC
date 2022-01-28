@@ -132,33 +132,24 @@ classdef MPC_Control_z < MPC_Control
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             % You can use the matrices mpc.A, mpc.B, mpc.C and mpc.D
-%             [nx, nu] = size(mpc.B);
-%             ny = size(mpc.C,1);
-%             A_bar = [mpc.A, zeros(nx,1); zeros(1,nx),1];
-%             B_bar = [mpc.B;zeros(1,nu)];
-%             C_bar = [mpc.C,ones(ny,1)];
-% %             L = 0.5*eye(size(mpc.C,1)); % Observer matri
-%             a = 0.1;
-%             b = 0.3;
-%             L = -place(A_bar',C_bar',[a,a + b, a + 2 *b])';
 
-               A = mpc.A;
-      B = mpc.B;
-      C = mpc.C;
-
-      nx = size(A, 1);
-      nu = size(B, 2);
-      ny = size(C, 1);
-
-      A_bar = [A,B;
-              zeros(1, nx), 1];
-
-      B_bar = [B;
-               zeros(1,nu)];
-
-      C_bar = [mpc.C, zeros(ny,1)];
-
-      L = -place(A_bar', C_bar', [0.1, 0.2, 0.3])';
+              A = mpc.A;
+              B = mpc.B;
+              C = mpc.C;
+        
+              nx = size(A, 1);
+              nu = size(B, 2);
+              ny = size(C, 1);
+        
+              A_bar = [A,B;
+                      zeros(1, nx), 1];
+        
+              B_bar = [B;
+                       zeros(1,nu)];
+        
+              C_bar = [mpc.C, zeros(ny,1)];
+        
+              L = -place(A_bar', C_bar', [0.1, 0.2, 0.3])';
 
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

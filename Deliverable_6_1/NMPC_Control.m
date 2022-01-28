@@ -17,6 +17,34 @@ ref_sym = opti.parameter(4, 1);   % target position
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
+M = zeros(nx, nu);
+M(10:12,1:3) = eye(3); %x y z 
+M(6, 4) = 1; %gamma
+
+% Q = diag([100 100 1 1 1 20 0.7 0.7 30 4 4 4000]);
+Q = diag([100 100 1 1 1 5 1 1 1 5000 5000 5000]);
+
+R = diag([0.0001 0.0001 0.0001 0.0001]);
+f_discrete = @(x,u) RK4(x,u,1/10,rocket);
+
+% sys_s = rocket.linearize(xs, us); % continuous
+% 
+% sys_sd = c2d(sys_s, rocket.Ts); % discrete
+
+obj=0;
+
+for i = 1 : N-1
+    opti.subject_to(X_sym(:, i+1) == f_discrete(X_sym(:,i), U_sym(:,i)))
+    obj = obj + (X_sym(:, i) - M * ref_sym)'*Q*(X_sym(:, i) - M * ref_sym) + U_sym(:, i)'*R*U_sym(:, i);
+end
+
+opti.subject_to(X_sym(:, 1) == x0_sym);
+opti.subject_to(-deg2rad(85) <= X_sym(5,:) <= deg2rad(85))
+
+opti.subject_to([-0.26; -0.26; 50; -20] <= U_sym <= [0.26; 0.26; 80; 20])
+
+opti.minimize(obj + (X_sym(:, N) - M * ref_sym)'*Q*(X_sym(:,N) - M * ref_sym));
+
 
 
 
@@ -46,4 +74,23 @@ u = opti.value(U_sym(:,1));
 % Use the current solution to speed up the next optimization
 opti.set_initial(sol.value_variables());
 opti.set_initial(opti.lam_g, sol.value(opti.lam_g));
+end
+
+function [x_next] = RK4(X,U,h,rocket)
+%
+% Inputs : 
+%    X, U current state and input
+%    h    sample period
+%    f    continuous time dynamics f(x,u)
+% Returns
+%    State h seconds in the future
+%
+
+% Runge-Kutta 4 integration
+% write your function here
+   k1 = rocket.f(X, U);
+   k2 = rocket.f(X+h/2*k1, U);
+   k3 = rocket.f(X+h/2*k2, U);
+   k4 = rocket.f(X+h*k3,   U);
+   x_next = X + h/6*(k1+2*k2+2*k3+k4);
 end
