@@ -11,7 +11,12 @@ Tf = 30;
 ref = @(t , x_) rocket.MPC_ref(t , Tf);
 
 % MPC reference with specified maximum roll = 50 deg
-roll max = deg2rad(50);
-ref = @(t , x_) rocket.MPC_ref(t , Tf, roll max);
+roll_max = deg2rad(50);
+ref = @(t , x_) rocket.MPC_ref(t , Tf, roll_max);
+x0 = zeros(12,1);
 [T, X, U, Ref] = rocket.simulate_f(x0, Tf, nmpc, ref);
 
+% Plot pose
+rocket.anim_rate = 10; % Increase this to make the animation faster
+ph = rocket.plotvis(T, X, U, Ref);
+ph.fig.Name = 'NMPC'; % Set a figure title
