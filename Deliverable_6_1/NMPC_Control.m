@@ -9,7 +9,7 @@ nu = 4;  % Number of inputs
 
 % Decision variables (symbolic)
 X_sym = opti.variable(nx, N); % state trajectory
-U_sym = opti.variable(nu, N-1);   % control trajectory)
+U_sym = opti.variable(nu, N-1);   % control trajectory
 
 % Parameters (symbolic)
 x0_sym  = opti.parameter(nx, 1);  % initial state
@@ -17,7 +17,21 @@ ref_sym = opti.parameter(4, 1);   % target position
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
+% Objective
+% conseil assistant sur piazza
+sys_s = rocket.linearize(xs, us); % continuous
+sys_sd = c2d(sys_s, rocket.Ts); % discrete
 
+% avec runge kutta
+h = rocket.Ts
+f_discrete = @(x,u) RK4(x,u,h,f);
+
+opti.minimize( ...
+     ... +  % minimize acceleration
+    ...
+    ...
+    ...
+    )
 
 
 % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
