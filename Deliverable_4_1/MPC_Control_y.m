@@ -83,10 +83,7 @@ classdef MPC_Control_y < MPC_Control
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             % You can use the matrices mpc.A, mpc.B, mpc.C and mpc.D
-
-
-            R = 1;
-
+            
             % u in U = { u| Mu <= m }
             M = [1; -1]; m = [0.26; 0.26];
             % x in X = { x | Fx <= f }
@@ -94,7 +91,7 @@ classdef MPC_Control_y < MPC_Control
             con = [M * us <= m, F * xs <= f, ...
                    xs == mpc.A*xs + mpc.B*us, ref == mpc.C*xs + mpc.D];
             
-            obj   = us' * R * us;
+            obj   = us^2;
             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

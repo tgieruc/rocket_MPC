@@ -33,8 +33,8 @@ classdef MPC_Control_x < MPC_Control
 
 
             % Horizon and cost matrices
-            Q = diag([20,1,1,1]) * eye(nx);
-            R = 0.001;
+            Q = diag([100,1,0.7,4]);
+            R = 1;
             A = mpc.A;
             B = mpc.B;
 

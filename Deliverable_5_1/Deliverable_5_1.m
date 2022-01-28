@@ -22,10 +22,10 @@ mpc = rocket.merge_lin_controllers(xs, us, mpc_x, mpc_y, mpc_z, mpc_roll);
 Tf = 30;
 ref = @(t_, x_) rocket.MPC_ref(t_, Tf);
 x0 = zeros(12,1);
-[T, X, U, Ref] = rocket.simulate_f(x0, Tf, mpc, ref);
+[T, X_without, U_without, Ref] = rocket.simulate_f(x0, Tf, mpc, ref);
 % Plot pose
 rocket.anim_rate = 10; % Increase this to make the animation faster
-ph = rocket.plotvis(T, X, U, Ref);
+ph = rocket.plotvis(T, X_without, U_without, Ref);
 ph.fig.Name = 'Without estimator'; % Set a figure title
 
 
@@ -34,9 +34,17 @@ Tf = 30;
 ref = @(t_, x_) rocket.MPC_ref(t_, Tf);
 x0 = zeros(12,1);
 rocket.mass = 1.783; % Manipulate mass for simulation
-[T, X, U, Ref, Zhat] = rocket.simulate_f_est_z(x0, Tf, mpc, ref, mpc_z, sys_z);
+[T, X_with, U_with, Ref, Zhat] = rocket.simulate_f_est_z(x0, Tf, mpc, ref, mpc_z, sys_z);
 
 % Plot pose
 rocket.anim_rate = 10; % Increase this to make the animation faster
-ph = rocket.plotvis(T, X, U, Ref);
+ph = rocket.plotvis(T, X_with, U_with, Ref);
 ph.fig.Name = 'With estimator'; % Set a figure title
+
+
+%% Comparison
+figure
+plot(T,U_with,T,U_without)
+plot(T,U_with(3,:),T,U_without(3,:))
+legend('with estimator', 'without estimator')
+ylabel('P_{avg} (%)')

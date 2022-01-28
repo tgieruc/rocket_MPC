@@ -102,16 +102,13 @@ classdef MPC_Control_z < MPC_Control
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             % You can use the matrices mpc.A, mpc.B, mpc.C and mpc.D
-
-            R = 1;
-
             % u in U = { u| Mu <= m }
             M = [1; -1]; m = [23.33; 6.66667];
             con = [M * us <= m, ...
                    xs == mpc.A*xs + mpc.B*us, ...
                    ref == mpc.C*xs + mpc.D];
             
-            obj   = us' * R * us;
+            obj   = us^2;
             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

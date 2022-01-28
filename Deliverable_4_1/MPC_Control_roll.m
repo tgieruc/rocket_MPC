@@ -84,7 +84,6 @@ classdef MPC_Control_roll < MPC_Control
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             % You can use the matrices mpc.A, mpc.B, mpc.C and mpc.D
-            R = 1;
 
             M = [1; -1]; m = [20; 20];
 
@@ -92,7 +91,7 @@ classdef MPC_Control_roll < MPC_Control
                    xs == mpc.A*xs + mpc.B*us, ...
                    ref == mpc.C*xs + mpc.D];
             
-            obj   = us' * R * us;
+            obj   = us^2;
             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

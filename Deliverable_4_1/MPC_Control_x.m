@@ -84,9 +84,6 @@ classdef MPC_Control_x < MPC_Control
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             % You can use the matrices mpc.A, mpc.B, mpc.C and mpc.D
 
-
-
-
             % u in U = { u| Mu <= m }
             M = [1; -1]; m = [0.26; 0.26];
             % x in X = { x | Fx <= f }

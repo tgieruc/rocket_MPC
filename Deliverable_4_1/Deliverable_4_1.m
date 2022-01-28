@@ -1,11 +1,10 @@
-
 addpath(fullfile('..', 'src'));
 
 %% TODO: This file should produce all the plots for the deliverable
 
 Ts = 1/20; % Sample time
 rocket = Rocket(Ts);
-H = 9; % Horizon length in seconds
+H = 4; % Horizon length in seconds
 
 [xs, us] = rocket.trim();
 sys = rocket.linearize(xs, us);
@@ -15,8 +14,6 @@ mpc_x = MPC_Control_x(sys_x, Ts, H);
 mpc_y = MPC_Control_y(sys_y, Ts, H);
 mpc_z = MPC_Control_z(sys_z, Ts, H);
 mpc_roll = MPC_Control_roll(sys_roll, Ts, H);
-
-
 
 % Merge four sub−system controllers into one full−system controller
 mpc = rocket.merge_lin_controllers(xs, us, mpc_x, mpc_y, mpc_z, mpc_roll);

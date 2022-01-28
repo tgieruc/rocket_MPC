@@ -47,8 +47,8 @@ classdef MPC_Control_z < MPC_Control
             
 
             % Step cost function
-            Q = 2 * eye(nx);
-            R = 1;
+            Q = diag([30,40]);
+            R = 0.5;
             A = mpc.A; B = mpc.B; 
             % u in U = { u| Mu <= m }
             M = [1; -1]; m = [23.33; 6.66667];
