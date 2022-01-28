@@ -17,13 +17,48 @@ ref_sym = opti.parameter(4, 1);   % target position
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
+
+%% System description
+
+%call the dynamic of the system 
+% Fly along the x/y/z axis. (from part1.m)
+d1 = 0;
+d2 = 0.008;
+Pavg = 80;
+Pdiff = 0;
+u = [d1, d2, Pavg, Pdiff]'; % (Assign appropriately)
+
+w = [0, 0, 0];
+phi = [0, pi/2, 0];
+v = [0, 0, 0];
+p = [0, 0, 0];
+x = [w, phi, v, p]'; % (Assign appropriately)
+
+f_discrete = @(x,u) RK4(x,u,N,rocket);
+
+%constraints:
+%abs(beta) < 85° = 1,48353 rad --> soft constraints ? 
+% abs(delta1) and abs(delta2) < 15° = 0.26 rad 
+% 0.2 < Pavg < 0.8 
+%others constraints were only there because of the linearization --> not
+%useful now
+
+
+% opti.minimize(...
+%   -10*sum(X_sym(2,:))  + ... % Max velocity
+%   0.1*U_sym(1,:)*U_sym(1,:)' + ... % Minimize accel
+%   10*U_sym(2,:)*U_sym(2,:)'); % Minimize braking
+
 opti.minimize(...
-  -10*sum(X(2,:))  + ... % Max velocity
-  0.1*U(1,:)*U(1,:)' + ... % Minimize accel
-  10*U(2,:)*U(2,:)'   + ... % Minimize braking
-  10000*(epsilon_speed(1,:)*epsilon_speed(1,:)' + sum(epsilon_speed))); % Soft constraints
+  -10*sum(X_sym(2,:))  + ... % Max velocity
+  0.1*U_sym(1,:)*U_sym(1,:)'); % Minimize accel
 
+% ---- multiple shooting --------
+for k=1:N % loop over control intervals
 
+  opti.subject_to(X_sym(:,k+1) == f_discrete(X_sym(:,k), U_sym(:,k)));
+ 
+end
 
 % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -51,4 +86,26 @@ u = opti.value(U_sym(:,1));
 % Use the current solution to speed up the next optimization
 opti.set_initial(sol.value_variables());
 opti.set_initial(opti.lam_g, sol.value(opti.lam_g));
+end
+
+
+
+
+function [x_next] = RK4(X,U,h,rocket.f)
+%
+% Inputs : 
+%    X, U current state and input
+%    h    sample period
+%    f    continuous time dynamics f(x,u)
+% Returns
+%    State h seconds in the future
+%
+
+% Runge-Kutta 4 integration
+% write your function here
+   k1 = rocket.f(X, U);
+   k2 = rocket.f(X+h/2*k1, U);
+   k3 = rocket.f(X+h/2*k2, U);
+   k4 = rocket.f(X+h*k3,   U);
+   x_next = X + h/6*(k1+2*k2+2*k3+k4);
 end
