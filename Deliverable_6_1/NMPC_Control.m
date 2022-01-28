@@ -34,7 +34,7 @@ f_discrete = @(x,u) RK4(x,u,1/10,rocket);
 obj=0;
 
 for i = 1 : N-1
-    opti.subject_to(X_sym(:, i+1) == f_discrete(X_sym(:,i), U_sym(:,i)))
+    opti.subject_to(X_sym(:, i+1) == f_discrete(X_sym(:,i), U_sym(:,i)));
     obj = obj + (X_sym(:, i) - M * ref_sym)'*Q*(X_sym(:, i) - M * ref_sym) + U_sym(:, i)'*R*U_sym(:, i);
 end
 
