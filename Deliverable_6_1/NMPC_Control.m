@@ -20,20 +20,6 @@ ref_sym = opti.parameter(4, 1);   % target position
 
 %% System description
 
-%call the dynamic of the system 
-% Fly along the x/y/z axis. (from part1.m)
-d1 = 0;
-d2 = 0.008;
-Pavg = 80;
-Pdiff = 0;
-u = [d1, d2, Pavg, Pdiff]'; % (Assign appropriately)
-
-w = [0, 0, 0];
-phi = [0, pi/2, 0];
-v = [0, 0, 0];
-p = [0, 0, 0];
-x = [w, phi, v, p]'; % (Assign appropriately)
-
 f_discrete = @(x,u) RK4(x,u,N,rocket);
 
 %constraints:
@@ -54,7 +40,7 @@ opti.minimize(...
   0.1*U_sym(1,:)*U_sym(1,:)'); % Minimize accel
 
 % ---- multiple shooting --------
-for k=1:N % loop over control intervals
+for k=1:N-1 % loop over control intervals
 
   opti.subject_to(X_sym(:,k+1) == f_discrete(X_sym(:,k), U_sym(:,k)));
  
@@ -91,7 +77,7 @@ end
 
 
 
-function [x_next] = RK4(X,U,h,rocket.f)
+function [x_next] = RK4(X,U,h,rocket)
 %
 % Inputs : 
 %    X, U current state and input

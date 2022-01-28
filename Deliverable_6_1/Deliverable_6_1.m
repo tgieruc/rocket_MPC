@@ -17,3 +17,8 @@ x0 = zeros(12,1); % --> good initial position ?
 
 [T, X, U, Ref] = rocket.simulate_f(x0, Tf, nmpc, ref);
 
+
+% Plot pose
+rocket.anim_rate = 10; % Increase this to make the animation faster
+ph = rocket.plotvis(T, X, U, Ref);
+ph.fig.Name = 'With estimator'; % Set a figure title
