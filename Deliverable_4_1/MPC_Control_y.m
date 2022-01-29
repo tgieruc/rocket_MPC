@@ -32,8 +32,9 @@ classdef MPC_Control_y < MPC_Control
             %       the DISCRETE-TIME MODEL of your system
             
             % Step cost function
-            Q = diag([100,1,0.7,4]) * eye(nx);
-            R = 1;
+            %         wx  a   vy    y
+            Q = diag([100, 1,  0.7,  4]);
+            R = 0.0001; %d2
             A = mpc.A; B = mpc.B; 
             % u in U = { u| Mu <= m }
             M = [1; -1]; m = [0.26; 0.26];

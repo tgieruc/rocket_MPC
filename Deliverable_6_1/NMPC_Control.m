@@ -20,8 +20,8 @@ ref_sym = opti.parameter(4, 1);   % target position
 M = zeros(nx, nu);
 M(10:12,1:3) = eye(3); %x y z 
 M(6, 4) = 1; %gamma
-
-Q = diag([50 50 1 1 1 500 1 1 1 5000 5000 5000]);
+%         wx wy wz a b g   vx vy vz x    y    z
+Q = diag([50 50 1  1 1 500 1  1  1  5000 5000 5000]);
 R = diag([0.0001 0.0001 1 0.0001]);
 
 f_discrete = @(x,u) RK4(x,u,1/10,rocket);
