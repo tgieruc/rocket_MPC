@@ -3,7 +3,7 @@ addpath(fullfile('..', 'src'));
 %% TODO: This file should produce all the plots for the deliverable
 Ts = 1/20;
 rocket = Rocket(Ts);
-H = 4;
+H = 1;
 [xs, us] = rocket.trim();
 sys = rocket.linearize(xs, us);
 

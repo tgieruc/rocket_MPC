@@ -19,8 +19,8 @@ mpc_roll = MPC_Control_roll(sys_roll, Ts, H);
 mpc = rocket.merge_lin_controllers(xs, us, mpc_x, mpc_y, mpc_z, mpc_roll);
 % Setup reference function
 Tf = 30;
-ref = @(t_, x_) rocket.MPC_ref(t_, Tf);
-
+roll_max = deg2rad(50);
+ref = @(t_, x_) rocket.MPC_ref(t_, Tf, roll_max);
 x0 = zeros(12,1);
 [T, X, U, Ref] = rocket.simulate_f(x0, Tf, mpc, ref);
 % Plot pose

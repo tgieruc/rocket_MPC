@@ -21,8 +21,9 @@ M = zeros(nx, nu);
 M(10:12,1:3) = eye(3); %x y z 
 M(6, 4) = 1; %gamma
 %         wx wy wz a b g   vx vy vz x    y    z
-Q = diag([50 50 1  1 1 500 1  1  1  5000 5000 5000]);
-R = diag([0.0001 0.0001 1 0.0001]);
+Q = diag([30 30 1  1 1 500 20  20  20  5000 5000 5000]);
+%         d1     d2     pavg  pdiff
+R = diag([0.0001 0.0001 1.5 0.0001]);
 
 f_discrete = @(x,u) RK4(x,u,1/10,rocket);
 
