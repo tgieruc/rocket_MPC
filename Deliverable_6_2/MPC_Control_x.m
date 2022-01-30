@@ -33,7 +33,7 @@ classdef MPC_Control_x < MPC_Control
             
             % Step cost function
             %         wy  beta vx    x
-            Q = diag([35, 1, 1,  10]);
+            Q = diag([40, 1, 1,  10]);
             R = 1; %d2
             A = mpc.A; B = mpc.B; 
             % u in U = { u| Mu <= m }
