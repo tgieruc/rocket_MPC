@@ -2,7 +2,7 @@ addpath(fullfile('..', 'src'));
 
 %% TODO: This file should produce all the plots for the deliverable
 Ts = 1/20; % Sample time
-H = 2; % Horizon length in seconds
+H = 5; % Horizon length in seconds
 Tf = 8.0;
 rocket = Rocket(Ts);
 

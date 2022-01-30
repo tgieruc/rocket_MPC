@@ -63,7 +63,7 @@ classdef MPC_Control_y < MPC_Control
 
 
             con = (X(:,2) == A*X(:,1) + B*U(:,1)) + (M*U(:,1) <= m);
-            obj = (U(:,1)-u_ref)'*R*(U(:,1)-u_ref);
+            obj = U(:,1)'*R*U(:,1);
             for i = 2:N-1
                 con = con + (X(:,i+1) == A*X(:,i) + B*U(:,i));
                 con = con + (F*X(:,i) <= f) + (M*U(:,i) <= m);
