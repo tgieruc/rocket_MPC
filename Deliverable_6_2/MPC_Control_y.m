@@ -44,7 +44,7 @@ classdef MPC_Control_y < MPC_Control
 
             %% Set up the MPC cost and constraints using the computed set-point
             con = (X(:,2) == A*X(:,1) + B*U(:,1))  + (M*U(:,1)<= m);
-            obj = U(:,1)'*R*U(:,1);
+            obj = (U(:,1)-u_ref)'*R*(U(:,1)-u_ref);
             for i = 2:N-1
                 con = con + (X(:,i+1) == A*X(:,i) + B*U(:,i));
                 obj   = obj + (X(:,i)-x_ref)'*Q*(X(:,i)-x_ref) + (U(:,i)-u_ref)'*R*(U(:,i)-u_ref);

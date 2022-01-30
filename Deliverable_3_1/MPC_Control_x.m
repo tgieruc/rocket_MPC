@@ -19,7 +19,7 @@ classdef MPC_Control_x < MPC_Control
             
             % Targets (Ignore this before Todo 3.2)
             x_ref = sdpvar(nx, 1);
-            u_ref = sdpvar(nu, 1);
+            u_ref = sdpvar (nu, 1);
             
             % Predicted state and input trajectories
             X = sdpvar(nx, N);
@@ -34,8 +34,8 @@ classdef MPC_Control_x < MPC_Control
 
             % Cost matrices
             %         wy b vx  x
-            Q = diag([100, 1, 1, 4]);
-            R = 0.001; %d2
+            Q = diag([10, 1, 1, 10]);
+            R = 1; %d2
 
             A = mpc.A;
             B = mpc.B;
@@ -67,7 +67,7 @@ classdef MPC_Control_x < MPC_Control
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
 
             con = (X(:,2) == A*X(:,1) + B*U(:,1)) + (M*U(:,1) <= m);
-            obj = U(:,1)'*R*U(:,1);
+            obj = (U(:,1)-u_ref)'*R*(U(:,1)-u_ref);
             for i = 2:N-1
                 con = con + (X(:,i+1) == A*X(:,i) + B*U(:,i));
                 con = con + (F*X(:,i) <= f) + (M*U(:,i) <= m);

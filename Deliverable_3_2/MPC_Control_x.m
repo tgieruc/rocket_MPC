@@ -33,8 +33,8 @@ classdef MPC_Control_x < MPC_Control
             
             % Cost matrices
             %         wy b vx  x
-            Q = diag([100, 1, 1, 4]);
-            R = 0.001; %d2
+            Q = diag([10, 1, 1, 10]);
+            R = 1; %d2
 
             A = mpc.A;
             B = mpc.B;
@@ -47,15 +47,14 @@ classdef MPC_Control_x < MPC_Control
             [~, P, ~] = dlqr(A,B,Q,R);
 
             %% Set up the MPC cost and constraints using the computed set-point
-            con = [];
-            obj   = 0;
-            for i = 1:N-1
+            con = (X(:,2) == A*X(:,1) + B*U(:,1)) + (M*U(:,1)<= m);
+            obj = (U(:,1)-u_ref)'*R*(U(:,1)-u_ref);
+            for i = 2:N-1
                 con = con + (X(:,i+1) == A*X(:,i) + B*U(:,i));
                 obj   = obj + (X(:,i)-x_ref)'*Q*(X(:,i)-x_ref) + (U(:,i)-u_ref)'*R*(U(:,i)-u_ref);
                 con = con + (F*X(:,i) <= f) +  (M*U(:,i)<= m);
             end
-            obj = obj + (X(:,i)-x_ref)'* P *(X(:,i)-x_ref);
-            
+            obj = obj + (X(:,N)-x_ref)'* P *(X(:,N)-x_ref);
             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
