@@ -17,6 +17,7 @@ ref_sym = opti.parameter(4, 1);   % target position
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
+
 M = zeros(nx, nu);
 M(10:12,1:3) = eye(3); %x y z 
 M(6, 4) = 1; %gamma

@@ -31,11 +31,12 @@ classdef MPC_Control_y < MPC_Control
             % NOTE: The matrices mpc.A, mpc.B, mpc.C and mpc.D are
             %       the DISCRETE-TIME MODEL of your system
             
-            % Horizon and cost matrices
+            % Cost matrices
             Q = diag([10,1,1,10]);
             R = 1;
             A = mpc.A;
             B = mpc.B;
+            
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
             M = [1; -1]; m = [0.26; 0.26];
             % x in X = { x | Fx <= f }

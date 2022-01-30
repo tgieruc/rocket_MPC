@@ -48,8 +48,9 @@ classdef MPC_Control_z < MPC_Control
             % Cost matrices
             Q = diag([1,40]);
             R = 1;
-            A = mpc.A;
-            B = mpc.B;
+
+            A = mpc.A; B = mpc.B;
+           
             M = [1; -1]; m = [23.33; 6.66];
             F = [0 0]; f = [0];
 

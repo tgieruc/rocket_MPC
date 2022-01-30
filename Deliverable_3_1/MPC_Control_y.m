@@ -36,8 +36,9 @@ classdef MPC_Control_y < MPC_Control
             %         wx a vy  y
             Q = diag([10, 1, 1, 10]);
             R = 1; %d1
-            A = mpc.A;
-            B = mpc.B;
+
+            A = mpc.A; B = mpc.B;
+            
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
             M = [1; -1]; m = [0.26; 0.26];
             % x in X = { x | Fx <= f }

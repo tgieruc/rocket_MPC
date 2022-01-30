@@ -6,7 +6,7 @@ rocket = Rocket(Ts);
 H = 4;
 nmpc = NMPC_Control(rocket, H);
 
-% MPC reference with default maximum roll = 15 deg
+%% MPC reference with default maximum roll = 15 deg
 Tf = 30;
 Simul_time = 30;
 ref = @(t_, x_) rocket.MPC_ref(t_, Tf);
@@ -18,7 +18,7 @@ rocket.anim_rate = 10; % Increase this to make the animation faster
 ph = rocket.plotvis(T, X_15, U_15, Ref_15);
 ph.fig.Name = 'NMPC_15'; % Set a figure title
 
-% % MPC reference with specified maximum roll = 50 deg
+%% MPC reference with specified maximum roll = 50 deg
 roll_max = deg2rad(50);
 ref = @(t_, x_) rocket.MPC_ref(t_, Tf, roll_max);
 [T, X_50, U_50, Ref_50] = rocket.simulate_f(x0, Simul_time, nmpc, ref);

@@ -2,7 +2,7 @@ addpath(fullfile('..', 'src'));
 
 %% TODO: This file should produce all the plots for the deliverable
 Ts = 1/20; % Sample time
-H = 5; % Horizon length in seconds
+H = 4; % Horizon length in seconds
 Tf = 8.0;
 rocket = Rocket(Ts);
 
@@ -19,26 +19,21 @@ mpc_roll = MPC_Control_roll(sys_roll, Ts, H);
 
 
 %% X 
-% Get control input
 x0 = [0, 0 ,0 ,5]'; 
 [T, X_sub, U_sub] = rocket.simulate(sys_x, x0, Tf, @mpc_x.get_u, 0);
 ph = rocket.plotvis_sub(T, X_sub, U_sub, sys_x, xs, us);
 
 %% Y
-% Get control input
 x0 = [0, 0 ,0 ,5]'; 
 [T, X_sub, U_sub] = rocket.simulate(sys_y, x0, Tf, @mpc_y.get_u, 0);
 ph = rocket.plotvis_sub(T, X_sub, U_sub, sys_y, xs, us);
 
 %% Z 
-% Get control input
 x0 = [0, 5]';
 [T, X_sub, U_sub] = rocket.simulate(sys_z, x0, Tf, @mpc_z.get_u, 0);
 ph = rocket.plotvis_sub(T, X_sub, U_sub, sys_z, xs, us);
 
-
 %% Roll
-% Get control input
 x0 = [0, pi/4]'; 
 [T, X_sub, U_sub] = rocket.simulate(sys_roll, x0, Tf, @mpc_roll.get_u, 0);
 ph = rocket.plotvis_sub(T, X_sub, U_sub, sys_roll, xs, us);

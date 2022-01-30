@@ -46,10 +46,12 @@ classdef MPC_Control_z < MPC_Control
             %       the DISCRETE-TIME MODEL of your system
 
 
-            % Step cost function
+            % Cost matrices
             Q = diag([1, 10]);
             R = 0.1; %P_avg
+
             A = mpc.A; B = mpc.B;
+
             % u in U = { u| Mu <= m }
             M = [1; -1]; m = [23.33; 6.66667];
             [~, P, ~] = dlqr(A,B,Q,R);
@@ -139,7 +141,7 @@ classdef MPC_Control_z < MPC_Control
               nu = size(B, 2);
               ny = size(C, 1);
         
-              A_bar = [A,B;
+              A_bar = [A,           B;
                       zeros(1, nx), 1];
         
               B_bar = [B;

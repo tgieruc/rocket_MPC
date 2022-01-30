@@ -31,14 +31,12 @@ classdef MPC_Control_x < MPC_Control
             % NOTE: The matrices mpc.A, mpc.B, mpc.C and mpc.D are
             %       the DISCRETE-TIME MODEL of your system
 
-
             % Cost matrices
             %         wy b vx  x
             Q = diag([10, 1, 1, 10]);
             R = 1; %d2
 
-            A = mpc.A;
-            B = mpc.B;
+            A = mpc.A; B = mpc.B;
 
             % Constrains
             % u in U = { u| Mu <= m }

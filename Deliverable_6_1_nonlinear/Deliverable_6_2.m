@@ -17,13 +17,15 @@ mpc_roll = MPC_Control_roll(sys_roll, Ts, H);
 
 % Merge four sub−system controllers into one full−system controller
 mpc = rocket.merge_lin_controllers(xs, us, mpc_x, mpc_y, mpc_z, mpc_roll);
+
 % Setup reference function
 Tf = 30;
 roll_max = deg2rad(50);
 ref = @(t_, x_) rocket.MPC_ref(t_, Tf, roll_max);
 x0 = zeros(12,1);
 [T, X, U, Ref] = rocket.simulate_f(x0, Tf, mpc, ref);
+
 % Plot pose
 rocket.anim_rate = 10; % Increase this to make the animation faster
 ph = rocket.plotvis(T, X, U, Ref);
-ph.fig.Name = 'Merged lin. MPC in nonlinear simulation'; % Set a figure title
+ph.fig.Name = 'Merged lin. MPC in nonlinear simulation with 50 deg roll_max'; % Set a figure title

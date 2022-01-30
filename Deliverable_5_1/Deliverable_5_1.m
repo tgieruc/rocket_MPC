@@ -3,7 +3,7 @@ addpath(fullfile('..', 'src'));
 %% TODO: This file should produce all the plots for the deliverable
 Ts = 1/20;
 rocket = Rocket(Ts);
-H = 1;
+H = 4;
 [xs, us] = rocket.trim();
 sys = rocket.linearize(xs, us);
 
@@ -40,11 +40,3 @@ x0 = zeros(12,1);
 rocket.anim_rate = 10; % Increase this to make the animation faster
 ph = rocket.plotvis(T, X_with, U_with, Ref);
 ph.fig.Name = 'With estimator'; % Set a figure title
-
-
-%% Comparison
-figure
-plot(T,U_with,T,U_without)
-plot(T,U_with(3,:),T,U_without(3,:))
-legend('with estimator', 'without estimator')
-ylabel('P_{avg} (%)')

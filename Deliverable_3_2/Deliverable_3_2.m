@@ -2,8 +2,8 @@ addpath(fullfile('..', 'src'));
 
 %% TODO: This file should produce all the plots for the deliverable
 Ts = 1/20; % Sample time
-H  = 2; % Horizon length in seconds
-Tf = 6.0;
+H  = 4; % Horizon length in seconds
+Tf = 8.0;
 rocket = Rocket(Ts);
 
 [xs, us] = rocket.trim();
@@ -18,7 +18,6 @@ mpc_roll = MPC_Control_roll(sys_roll, Ts, H);
 
 
 %% X 
-% Get control input
 x0 = [0, 0 ,0 ,0]'; 
 x_ref = -5; 
 [T, X_sub, U_sub] = rocket.simulate(sys_x, x0, Tf, @mpc_x.get_u, x_ref);

@@ -1,4 +1,4 @@
-classdef MPC_Control_y < MPC_Control
+classdef MPC_Control_x < MPC_Control
     
     methods
         % Design a YALMIP optimizer object that takes a steady-state state
@@ -31,8 +31,8 @@ classdef MPC_Control_y < MPC_Control
             % NOTE: The matrices mpc.A, mpc.B, mpc.C and mpc.D are
             %       the DISCRETE-TIME MODEL of your system
             
-            % Step cost function
-            %         wx  a   vy    y
+            % Cost matrices
+            %         wy  beta vx    x
             Q = diag([40, 1, 1,  10]);
             R = 1; %d2
             A = mpc.A; B = mpc.B; 
@@ -43,7 +43,7 @@ classdef MPC_Control_y < MPC_Control
             [~, P, ~] = dlqr(A,B,Q,R);
 
             %% Set up the MPC cost and constraints using the computed set-point
-            con = (X(:,2) == A*X(:,1) + B*U(:,1))  + (M*U(:,1)<= m);
+            con = (X(:,2) == A*X(:,1) + B*U(:,1)) + (M*U(:,1)<= m);
             obj = (U(:,1)-u_ref)'*R*(U(:,1)-u_ref);
             for i = 2:N-1
                 con = con + (X(:,i+1) == A*X(:,i) + B*U(:,i));
@@ -51,7 +51,6 @@ classdef MPC_Control_y < MPC_Control
                 con = con + (F*X(:,i) <= f) +  (M*U(:,i)<= m);
             end
             obj = obj + (X(:,N)-x_ref)'* P *(X(:,N)-x_ref);
-            
             
             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
@@ -85,13 +84,14 @@ classdef MPC_Control_y < MPC_Control
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             % You can use the matrices mpc.A, mpc.B, mpc.C and mpc.D
-            
+
             % u in U = { u| Mu <= m }
             M = [1; -1]; m = [0.26; 0.26];
             % x in X = { x | Fx <= f }
             F = [0 1 0 0 ; 0 -1 0 0]; f = [deg2rad(5); deg2rad(5)];
             con = [M * us <= m, F * xs <= f, ...
-                   xs == mpc.A*xs + mpc.B*us, ref == mpc.C*xs + mpc.D];
+                   xs == mpc.A*xs + mpc.B*us, ...
+                   ref == mpc.C*xs + mpc.D];
             
             obj   = us^2;
             

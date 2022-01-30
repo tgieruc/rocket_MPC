@@ -31,11 +31,13 @@ classdef MPC_Control_x < MPC_Control
             % NOTE: The matrices mpc.A, mpc.B, mpc.C and mpc.D are
             %       the DISCRETE-TIME MODEL of your system
             
-            % Step cost function
+            % Cost matrices
             %         wy  beta vx    x
             Q = diag([35, 1, 1,  10]);
             R = 1; %d2
+
             A = mpc.A; B = mpc.B; 
+            
             % u in U = { u| Mu <= m }
             M = [1; -1]; m = [0.26; 0.26];
             % x in X = { x | Fx <= f }

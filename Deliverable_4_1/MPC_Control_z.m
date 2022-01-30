@@ -46,7 +46,7 @@ classdef MPC_Control_z < MPC_Control
             %       the DISCRETE-TIME MODEL of your system
             
 
-            % Step cost function
+            % Cost matrices
             %         vz  z
             Q = diag([1, 10]);
             R = 0.1; %P_avg
@@ -103,6 +103,7 @@ classdef MPC_Control_z < MPC_Control
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             % You can use the matrices mpc.A, mpc.B, mpc.C and mpc.D
+            
             % u in U = { u| Mu <= m }
             M = [1; -1]; m = [23.33; 6.66667];
             con = [M * us <= m, ...
