@@ -48,8 +48,8 @@ classdef MPC_Control_z < MPC_Control
 
             % Step cost function
             %         vz  z
-            Q = diag([0.7, 4]);
-            R = 0.09; %P_avg
+            Q = diag([1, 10]);
+            R = 0.1; %P_avg
             A = mpc.A; B = mpc.B; 
             % u in U = { u| Mu <= m }
             M = [1; -1]; m = [23.33; 6.66667];

@@ -31,11 +31,12 @@ classdef MPC_Control_y < MPC_Control
             % NOTE: The matrices mpc.A, mpc.B, mpc.C and mpc.D are
             %       the DISCRETE-TIME MODEL of your system
             
-            % Step cost function
+            % Horizon and cost matrices
             Q = diag([100,1,0.7,4]);
             R = 1;
-            A = mpc.A; B = mpc.B; 
-            % u in U = { u| Mu <= m }
+            A = mpc.A;
+            B = mpc.B;
+            % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
             M = [1; -1]; m = [0.26; 0.26];
             % x in X = { x | Fx <= f }
             F = [0 1 0 0 ; 0 -1 0 0]; f = [0.0873; 0.0873];

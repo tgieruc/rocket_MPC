@@ -61,6 +61,7 @@ classdef MPC_Control_roll < MPC_Control
             [Ff,ff] = double(Xf);
 
 
+
             con = (X(:,2) == A*X(:,1) + B*U(:,1)) + (M*U(:,1) <= m);
             obj = U(:,1)'*R*U(:,1);
             for i = 2:N-1

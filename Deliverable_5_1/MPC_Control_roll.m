@@ -33,8 +33,9 @@ classdef MPC_Control_roll < MPC_Control
             
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
             % Horizon and cost matrices
-            Q = diag([1,20]) * eye(nx);
-            R = 0.01;
+            %         wz gamma
+            Q = diag([1, 400]);
+            R = 1; %Pdiff
             A = mpc.A; B = mpc.B; 
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
             % u in U = { u| Mu <= m }

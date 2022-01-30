@@ -4,7 +4,7 @@ addpath(fullfile('..', 'src'));
 
 Ts = 1/20; % Sample time
 rocket = Rocket(Ts);
-H = 4; % Horizon length in seconds
+H = 1; % Horizon length in seconds
 
 [xs, us] = rocket.trim();
 sys = rocket.linearize(xs, us);

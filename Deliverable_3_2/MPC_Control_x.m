@@ -31,10 +31,15 @@ classdef MPC_Control_x < MPC_Control
             % NOTE: The matrices mpc.A, mpc.B, mpc.C and mpc.D are
             %       the DISCRETE-TIME MODEL of your system
             
-            % Step cost function
-            Q = diag([100,1,0.7,4]);
-            R = 1;
-            A = mpc.A; B = mpc.B; 
+            % Cost matrices
+            %         wy b vx  x
+            Q = diag([100, 1, 1, 4]);
+            R = 0.001; %d2
+
+            A = mpc.A;
+            B = mpc.B;
+
+            % Constrains
             % u in U = { u| Mu <= m }
             M = [1; -1]; m = [0.26; 0.26];
             % x in X = { x | Fx <= f }
@@ -84,9 +89,6 @@ classdef MPC_Control_x < MPC_Control
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             % You can use the matrices mpc.A, mpc.B, mpc.C and mpc.D
 
-
-            R = 1;
-
             % u in U = { u| Mu <= m }
             M = [1; -1]; m = [0.26; 0.26];
             % x in X = { x | Fx <= f }
@@ -95,7 +97,7 @@ classdef MPC_Control_x < MPC_Control
                    xs == mpc.A*xs + mpc.B*us, ...
                    ref == mpc.C*xs + mpc.D];
             
-            obj   = us' * R * us;
+            obj   = us^2;
             
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE
             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

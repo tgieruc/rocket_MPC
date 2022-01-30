@@ -32,12 +32,16 @@ classdef MPC_Control_x < MPC_Control
             %       the DISCRETE-TIME MODEL of your system
 
 
-            % Horizon and cost matrices
-            Q = diag([100,1,0.7,4]);
-            R = 1;
+            % Cost matrices
+            %         wy b vx  x
+            Q = diag([100, 1, 1, 4]);
+            R = 0.001; %d2
+
             A = mpc.A;
             B = mpc.B;
 
+            % Constrains
+            % u in U = { u| Mu <= m }
             M = [1; -1]; m = [0.26; 0.26];
             % x in X = { x | Fx <= f }
             F = [0 1 0 0 ; 0 -1 0 0]; f = [0.0873; 0.0873];
@@ -59,6 +63,8 @@ classdef MPC_Control_x < MPC_Control
                 end
             end
             [Ff,ff] = double(Xf);
+            
+            % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
 
             con = (X(:,2) == A*X(:,1) + B*U(:,1)) + (M*U(:,1) <= m);
             obj = U(:,1)'*R*U(:,1);
