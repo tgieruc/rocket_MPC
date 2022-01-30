@@ -35,7 +35,7 @@ classdef MPC_Control_roll < MPC_Control
             % Horizon and cost matrices
             %         wz gamma
             Q = diag([1, 400]);
-            R = 1; %Pdiff
+            R = 0.01; %Pdiff
             A = mpc.A; B = mpc.B; 
             % SET THE PROBLEM CONSTRAINTS con AND THE OBJECTIVE obj HERE
             % u in U = { u| Mu <= m }
@@ -52,7 +52,7 @@ classdef MPC_Control_roll < MPC_Control
                 obj   = obj + (X(:,i)-x_ref)'*Q*(X(:,i)-x_ref) + (U(:,i)-u_ref)'*R*(U(:,i)-u_ref);
                 con = con + (M*U(:,i)<= m);
             end
-            obj = obj + (X(:,i)-x_ref)'*P*(X(:,i)-x_ref);
+            obj = obj + (X(:,N)-x_ref)'*P*(X(:,N)-x_ref);
             
 
             % YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE YOUR CODE HERE

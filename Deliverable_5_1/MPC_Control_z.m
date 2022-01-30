@@ -62,7 +62,7 @@ classdef MPC_Control_z < MPC_Control
                 obj   = obj + (X(:,i)-x_ref)'*Q*(X(:,i)-x_ref) + (U(:,i)-u_ref)'*R*(U(:,i)-u_ref);
                 con = con + (M*U(:,i)<= m);
             end
-            obj = obj + (X(:,i)-x_ref)'* P *(X(:,i)-x_ref);
+            obj = obj + (X(:,N)-x_ref)'* P *(X(:,N)-x_ref);
 
 
 
