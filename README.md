@@ -5,6 +5,6 @@ The objective is to develop an MPC controller to fly a rocket prototype. An MPC 
 
 Done using Matlab, with YALMIP, MPT3, Gurobi and Casadi.
 
-[Project description](https://github.com/tgieruc/rocket_project_MPC/blob/main/Project_description.pdf)
+[Project description](https://github.com/tgieruc/rocket_MPC/blob/main/Project_description.pdf)
 
-[Project report](https://github.com/tgieruc/rocket_project_MPC/blob/main/Project_report.pdf)
+[Project report](https://github.com/tgieruc/rocket_MPC/blob/main/Project_report.pdf)
